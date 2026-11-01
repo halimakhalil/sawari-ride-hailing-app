@@ -21,6 +21,3 @@ Simplified on purpose for this project:
 
 Possible next steps: live driver locations and automatic dispatch, WebSocket updates, payments, driver cancellation and re-assignment, phone OTP sign-up, and monitoring.
 
----
-
-*Built with the help of an AI coding assistant (Claude Code). All features and tests were verified by running them.*
