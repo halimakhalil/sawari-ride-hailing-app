@@ -5,7 +5,6 @@ A rider books a car (Economy or Comfort) between two places in Lahore. A nearby 
 - **Backend:** Laravel 12 (PHP 8.2+), MySQL 8 / MariaDB, Sanctum, PHPUnit
 - **Frontend:** React 19, TypeScript, Vite, Tailwind CSS, Axios, Vitest, Playwright
 
-Design details, diagrams and scaling notes are in **[ARCHITECTURE.md](ARCHITECTURE.md)**.
 
 ---
 
