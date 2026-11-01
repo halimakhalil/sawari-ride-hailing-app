@@ -2,13 +2,14 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Ride;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * A ride request in a driver's feed, with the distance from the driver to the pickup.
  *
- * @property array{ride: \App\Models\Ride, distance_km: float} $resource
+ * @property array{ride: Ride, distance_km: float} $resource
  */
 class OpenRideResource extends JsonResource
 {

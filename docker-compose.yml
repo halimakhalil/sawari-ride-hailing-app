@@ -1,0 +1,62 @@
+# Local stack: MySQL 8 + Laravel API + production frontend build behind nginx.
+#   docker compose up --build        → http://localhost:8080 (app), http://localhost:8000/docs (API docs)
+#   docker compose exec backend php artisan test
+#
+# Credentials below are local-development placeholders; override them with a
+# root-level .env file (never committed) for anything shared.
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ride_hailing
+      MYSQL_USER: ${DB_USERNAME:-sawari}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-sawari-local-only}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root-local-only}
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "3307:3306" # 3307 avoids clashing with a local MySQL/MariaDB on 3306
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  backend:
+    build: ./backend
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8000
+      FRONTEND_URL: http://localhost:8080
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: ride_hailing
+      DB_USERNAME: ${DB_USERNAME:-sawari}
+      DB_PASSWORD: ${DB_PASSWORD:-sawari-local-only}
+      LOG_CHANNEL: stderr
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8000/api/health || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+
+volumes:
+  mysql-data:

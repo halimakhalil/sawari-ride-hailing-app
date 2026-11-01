@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\Driver;
 use App\Models\Ride;
+use Illuminate\Database\QueryException;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -123,14 +125,14 @@ class RideCreationTest extends TestCase
     {
         $ride = Ride::factory()->create();
 
-        $this->expectException(\Illuminate\Database\UniqueConstraintViolationException::class);
+        $this->expectException(UniqueConstraintViolationException::class);
 
         Ride::factory()->create(['rider_id' => $ride->rider_id]);
     }
 
     public function test_database_rejects_a_negative_fare(): void
     {
-        $this->expectException(\Illuminate\Database\QueryException::class);
+        $this->expectException(QueryException::class);
 
         Ride::factory()->create(['estimated_fare' => -10]);
     }

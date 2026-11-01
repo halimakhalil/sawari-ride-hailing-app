@@ -15,6 +15,7 @@ use App\Models\Driver;
 use App\Models\Rider;
 use App\Services\RideService;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Support\Facades\DB;
 
 require __DIR__.'/../../vendor/autoload.php';
 
@@ -24,7 +25,7 @@ $app->make(Kernel::class)->bootstrap();
 [, $action, $subjectId, $actorArg, $startAt] = $argv + [null, null, null, null, '0'];
 
 // Open the connection before the barrier so connect time does not skew the race.
-Illuminate\Support\Facades\DB::select('select 1');
+DB::select('select 1');
 
 $readyAt = microtime(true);
 while (microtime(true) < (float) $startAt) {

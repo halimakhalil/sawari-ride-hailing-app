@@ -47,7 +47,8 @@ class AuthController extends Controller
             throw ValidationException::withMessages(['email' => 'These credentials do not match our records.']);
         }
 
-        $token = $user->createToken("{$role}-web", [$role]);
+        $lifetime = config('sanctum.expiration');
+        $token = $user->createToken("{$role}-web", [$role], $lifetime ? now()->addMinutes($lifetime) : null);
 
         return response()->json([
             'data' => [

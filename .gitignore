@@ -1,0 +1,30 @@
+# Secrets and local environment — only *.env.example files are committed
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Dependencies and build output
+backend/vendor/
+frontend/node_modules/
+frontend/dist/
+
+# Test artefacts
+backend/.phpunit.result.cache
+backend/.phpunit.cache/
+frontend/test-results/
+frontend/playwright-report/
+
+# Laravel runtime files
+backend/storage/*.key
+backend/storage/logs/*.log
+backend/database/*.sqlite
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
